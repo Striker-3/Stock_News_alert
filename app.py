@@ -5,19 +5,14 @@ import requests
 import smtplib
 import schedule
 import time
+import threading
 from requirements import STOCK_NAME , COMPANY_NAME , api_key_alphavantage , api_key_news , my_email , password
-# Your existing constants
-# STOCK_NAME = "TSLA"
-# COMPANY_NAME = "Tesla Inc"
-# api_key_alphavantage = "POFBA2EN11KWWTA7"
-# api_key_news = "8f3ba393bf1e4bd3a9dca8cd66082fd4"
-# my_email = "www.nishantwailkar71@gmail.com"
-# password = "jmav jpxr suvi tmlw"
 
-# Setup Flask app
+
+
 app = Flask(__name__)
 
-# Database setup - Create DB and table if not exist (done once)
+
 def setup_db():
     conn = sqlite3.connect('stocks.db')
     cursor = conn.cursor()
@@ -31,7 +26,7 @@ def setup_db():
     conn.commit()
     conn.close()
 
-# Add user to the database
+
 def add_user(email, stock):
     conn = sqlite3.connect('stocks.db')
     cursor = conn.cursor()
@@ -39,7 +34,7 @@ def add_user(email, stock):
     conn.commit()
     conn.close()
 
-# Get all users from the database
+
 def get_users():
     conn = sqlite3.connect('stocks.db')
     cursor = conn.cursor()
@@ -48,12 +43,12 @@ def get_users():
     conn.close()
     return users
 
-# Home route (index page with form)
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Route to handle form submission
+
 @app.route('/submit', methods=['POST'])
 def submit():
     email = request.form['email']
@@ -61,7 +56,7 @@ def submit():
     add_user(email, stock)
     return redirect(url_for('index'))
 
-# Function to send email updates based on stock price
+
 def send_emails():
     users = get_users()
     for email, stock in users:
@@ -108,20 +103,20 @@ def send_emails():
                     msg=msg.encode('utf-8')
                 )
 
-# Schedule the email sending task to run daily at 9:00 AM
+
 schedule.every().day.at("09:00").do(send_emails)
 
-# Run the scheduled tasks
+
 def run_scheduler():
     while True:
         schedule.run_pending()
         time.sleep(60)
 
-# Run the scheduler in a separate thread
-import threading
+
+
 scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
 scheduler_thread.start()
 
 if __name__ == '__main__':
-    setup_db()  # Ensure the DB is set up when app starts
-    app.run(debug=True, use_reloader=False)  # use_reloader=False to avoid multiple scheduler threads
+    setup_db() 
+    app.run(debug=True, use_reloader=False)  
