@@ -1,6 +1,0 @@
-STOCK_NAME = "TSLA"
-COMPANY_NAME = "Tesla Inc"
-api_key_alphavantage = "POFBA2EN11KWWTA7"
-api_key_news = "8f3ba393bf1e4bd3a9dca8cd66082fd4"
-my_email = "www.nishantwailkar71@gmail.com"
-password = "jmav jpxr suvi tmlw"
