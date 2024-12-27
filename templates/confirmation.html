@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Confirmation</title>
+    <!-- Meta Refresh to redirect to the homepage after 15 seconds -->
+    <meta http-equiv="refresh" content="15;url=/" />
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #0f172a;
+            --background-color: #f0f4f8;
+            --card-background: #ffffff;
+            --text-color: #334155;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --success-color: #10B981;
+            --info-background: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirmation-container {
+            background-color: var(--card-background);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .icon {
+            width: 64px;
+            height: 64px;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        p {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box {
+            background-color: var(--info-background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .info-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background-color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .small-text {
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h1>Subscription Successful!</h1>
+        <p>You have successfully subscribed to alerts for:</p>
+        <div class="info-box">
+            <ul class="info-list">
+                <li>
+                    <span class="info-label">Stock Symbol:</span>
+                    <span class="info-value">{{ stock_symbol }}</span>
+                </li>
+                <li>
+                    <span class="info-label">Stock Name:</span>
+                    <span class="info-value">{{ stock_name }}</span>
+                </li>
+            </ul>
+        </div>
+        <p>Thank you for using our service.</p>
+        <p class="small-text">You will be redirected to the homepage in 15 seconds.</p>
+        <a href="/" class="btn">Return to Homepage</a>
+    </div>
+</body>
+</html>

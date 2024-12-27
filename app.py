@@ -6,9 +6,7 @@ import smtplib
 import schedule
 import time
 import threading
-from requirements import STOCK_NAME , COMPANY_NAME , api_key_alphavantage , api_key_news , my_email , password
-
-
+from requirements import STOCK_NAME, COMPANY_NAME, api_key_alphavantage, api_key_news, my_email, password
 
 app = Flask(__name__)
 
@@ -44,6 +42,30 @@ def get_users():
     return users
 
 
+def get_stock_data(stock_symbol):
+    response1 = requests.get(
+        f"https://financialmodelingprep.com/api/v3/search?query={stock_symbol}&apikey=HemPBSRpXfBTAoIe9jojlPUSJWKkPGTB")
+    data1 = response1.json()
+    return data1
+
+# for input suggestins
+@app.route('/api/search_stocks')
+def search_stocks():
+    query = request.args.get('query', '')
+    if not query:
+        return {"stocks": []}
+    try:
+        response = requests.get(
+            f"https://financialmodelingprep.com/api/v3/search?query={query}&limit=10&apikey=HemPBSRpXfBTAoIe9jojlPUSJWKkPGTB"
+        )
+        response.raise_for_status()
+        data = response.json()
+        stocks = [{"symbol": stock["symbol"], "name": stock["name"]} for stock in data]
+        return {"stocks": stocks}
+    except requests.exceptions.RequestException as e:
+        return {"error": str(e)}, 500
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -54,7 +76,27 @@ def submit():
     email = request.form['email']
     stock = request.form['stock']
     add_user(email, stock)
-    return redirect(url_for('index'))
+
+    stock_data = get_stock_data(stock)
+
+    if "error" in stock_data:
+        return "Error"
+
+    # Now you have the stock data (e.g., price, date)
+    # stock_symbol = get_stock_data()[0]['symbol']
+    # stock_name = get_stock_data()[0]['name']
+
+    if stock_data and isinstance(stock_data, list) and len(stock_data) > 0:
+        stock_symbol = stock_data[0].get('symbol')
+        stock_name = stock_data[0].get('name')
+    else:
+        return "Invalid stock data received."
+
+    # Here you can integrate sending email logic or displaying data
+
+    return render_template('confirmation.html', stock=stock, stock_symbol=stock_symbol, stock_name=stock_name)
+    # return redirect(url_for('index'))
+
 
 
 def send_emails():
@@ -113,10 +155,9 @@ def run_scheduler():
         time.sleep(60)
 
 
-
 scheduler_thread = threading.Thread(target=run_scheduler, daemon=True)
 scheduler_thread.start()
 
 if __name__ == '__main__':
-    setup_db() 
-    app.run(debug=True, use_reloader=False)  
+    setup_db()
+    app.run(debug=True, use_reloader=False)
