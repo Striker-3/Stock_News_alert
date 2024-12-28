@@ -5,10 +5,20 @@ import requests
 import smtplib
 import schedule
 import time
+import os
+from dotenv import load_dotenv
 import threading
-from requirements import STOCK_NAME, COMPANY_NAME, api_key_alphavantage, api_key_news, my_email, password
+
 
 app = Flask(__name__)
+
+# adding env variables
+load_dotenv()
+api_key_alphavantage = os.getenv("API_KEY_ALPHAVANTAGE")
+api_key_news = os.getenv("API_KEY_NEWS")
+my_email = os.getenv("SENDERS_EMAIL")
+password = os.getenv("PASSWORD")
+stock_api = os.getenv("API_KEY_STOCKS_FINANCIALMODELLING")
 
 
 def setup_db():
@@ -48,6 +58,7 @@ def get_stock_data(stock_symbol):
     data1 = response1.json()
     return data1
 
+
 # for input suggestins
 @app.route('/api/search_stocks')
 def search_stocks():
@@ -82,21 +93,13 @@ def submit():
     if "error" in stock_data:
         return "Error"
 
-    # Now you have the stock data (e.g., price, date)
-    # stock_symbol = get_stock_data()[0]['symbol']
-    # stock_name = get_stock_data()[0]['name']
-
     if stock_data and isinstance(stock_data, list) and len(stock_data) > 0:
         stock_symbol = stock_data[0].get('symbol')
         stock_name = stock_data[0].get('name')
     else:
         return "Invalid stock data received."
 
-    # Here you can integrate sending email logic or displaying data
-
     return render_template('confirmation.html', stock=stock, stock_symbol=stock_symbol, stock_name=stock_name)
-    # return redirect(url_for('index'))
-
 
 
 def send_emails():
