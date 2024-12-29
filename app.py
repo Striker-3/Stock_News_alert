@@ -8,7 +8,6 @@ import os
 from dotenv import load_dotenv
 import threading
 
-
 app = Flask(__name__)
 
 # adding env variables
@@ -32,6 +31,9 @@ def setup_db():
     ''')
     conn.commit()
     conn.close()
+
+
+setup_db()
 
 
 def add_user(email, stock):
@@ -165,6 +167,6 @@ scheduler_thread.start()
 #     app.run(debug=True, use_reloader=False)
 if __name__ == '__main__':
     import os
+
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
