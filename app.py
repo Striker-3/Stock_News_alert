@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-import newsapi
 import requests
 import smtplib
 import schedule
